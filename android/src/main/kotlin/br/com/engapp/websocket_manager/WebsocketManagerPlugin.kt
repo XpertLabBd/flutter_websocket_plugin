@@ -9,7 +9,7 @@ import io.flutter.embedding.engine.plugins.FlutterPlugin.FlutterPluginBinding
 import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.plugin.common.EventChannel
 import io.flutter.plugin.common.MethodChannel
-import io.flutter.plugin.common.PluginRegistry.Registrar
+import io.flutter.embedding.android.FlutterActivity
 
 
 class WebsocketManagerPlugin: FlutterPlugin {
@@ -21,17 +21,18 @@ class WebsocketManagerPlugin: FlutterPlugin {
   private val closeStreamHandler = EventStreamHandler(this::onListenCloseCallback, this::onCancelCallback)
 
   /** Plugin registration.  */
-  companion object {
+  /*companion object {
     @JvmStatic
     fun registerWith(registrar: Registrar) {
       val plugin = WebsocketManagerPlugin()
       plugin.setupChannels(registrar.messenger(), registrar.context())
     }
-  }
+  }*/
 
   override fun onAttachedToEngine(binding: FlutterPluginBinding) {
     setupChannels(binding.binaryMessenger, binding.applicationContext)
   }
+
 
   override fun onDetachedFromEngine(binding: FlutterPluginBinding) {
     teardownChannels()

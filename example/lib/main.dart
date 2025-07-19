@@ -15,10 +15,9 @@ class _MyAppState extends State<MyApp> {
     super.initState();
   }
 
-  final TextEditingController _urlController =
-      TextEditingController(text: 'wss://echo.websocket.org');
+  final TextEditingController _urlController = TextEditingController(text: 'wss://echo.websocket.org');
   final TextEditingController _messageController = TextEditingController();
-  WebsocketManager socket;
+  WebsocketManager? socket;
   String _message = '';
   String _closeMessage = '';
 
@@ -36,32 +35,31 @@ class _MyAppState extends State<MyApp> {
             ),
             Wrap(
               children: <Widget>[
-                RaisedButton(
-                  child: Text('CONFIG'),
+                ElevatedButton(
+                  child: const Text('CONFIG'),
                   onPressed: () =>
-                      socket = WebsocketManager(_urlController.text),
+                  socket = WebsocketManager(_urlController.text,{}),
                 ),
-                RaisedButton(
-                  child: Text('CONNECT'),
+                ElevatedButton(
                   onPressed: () {
                     if (socket != null) {
-                      socket.connect();
+                      socket!.connect();
                     }
                   },
+                  child:  const Text('CONNECT'),
                 ),
-                RaisedButton(
-                  child: Text('CLOSE'),
+                ElevatedButton(
                   onPressed: () {
                     if (socket != null) {
-                      socket.close();
+                      socket!.close();
                     }
                   },
+                  child:  const Text('CLOSE'),
                 ),
-                RaisedButton(
-                  child: Text('LISTEN MESSAGE'),
+                ElevatedButton(
                   onPressed: () {
                     if (socket != null) {
-                      socket.onMessage((dynamic message) {
+                      socket!.onMessage((dynamic message) {
                         print('New message: $message');
                         setState(() {
                           _message = message.toString();
@@ -69,12 +67,12 @@ class _MyAppState extends State<MyApp> {
                       });
                     }
                   },
+                  child:  const Text('LISTEN MESSAGE'),
                 ),
-                RaisedButton(
-                  child: Text('LISTEN DONE'),
+                ElevatedButton(
                   onPressed: () {
                     if (socket != null) {
-                      socket.onClose((dynamic message) {
+                      socket!.onClose((dynamic message) {
                         print('Close message: $message');
                         setState(() {
                           _closeMessage = message.toString();
@@ -82,29 +80,33 @@ class _MyAppState extends State<MyApp> {
                       });
                     }
                   },
+                  child:  const Text('LISTEN DONE'),
                 ),
-                RaisedButton(
-                  child: Text('ECHO TEST'),
-                  onPressed: () => WebsocketManager.echoTest(),
+                ElevatedButton(
+                  onPressed: () {
+                    WebsocketManager.echoTest();
+                  },
+                  child:  const Text('ECHO TEST'),
                 ),
+
               ],
             ),
             TextField(
               controller: _messageController,
               decoration: InputDecoration(
                 suffixIcon: IconButton(
-                  icon: Icon(Icons.send),
+                  icon: const Icon(Icons.send),
                   onPressed: () {
                     if (socket != null) {
-                      socket.send(_messageController.text);
+                      socket!.send(_messageController.text);
                     }
                   },
                 ),
               ),
             ),
-            Text('Received message:'),
+            const Text('Received message:'),
             Text(_message),
-            Text('Close message:'),
+            const Text('Close message:'),
             Text(_closeMessage),
           ],
         ),
